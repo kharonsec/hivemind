@@ -44,4 +44,29 @@ fi
 # Verify JSON is always valid regardless of CLI availability
 echo "$output" | python3 -c "import sys, json; d = json.load(sys.stdin); print('PASS: Valid JSON regardless of CLI availability')"
 
+# Test config file detection
+config_dir=$(mktemp -d)
+cat > "${config_dir}/ai-routing.json" <<'CONF'
+{"overrides":{"mechanical":"codex"},"disabled":["gemini"],"timeout":300}
+CONF
+
+# Run hook with config path override for testing
+output_config=$(SUPERPOWERS_AI_CONFIG="${config_dir}/ai-routing.json" bash "$HOOK" 2>&1)
+
+if echo "$output_config" | grep -q "AI Routing Config"; then
+    echo "PASS: Config detection found"
+else
+    echo "FAIL: Config detection not found"
+    exit 1
+fi
+
+# Verify config output is still valid JSON
+echo "$output_config" | python3 -c "import sys, json; json.load(sys.stdin)" || {
+    echo "FAIL: Hook output with config is not valid JSON"
+    exit 1
+}
+echo "PASS: Valid JSON with config"
+
+rm -rf "$config_dir"
+
 echo "All tests passed"

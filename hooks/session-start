@@ -30,7 +30,7 @@ escape_for_json() {
     printf '%s' "$s"
 }
 
-# Detect available AI CLIs
+# Detect available AI CLIs (canonical routing targets — see ai-routing skill)
 available_ais=""
 for cli in codex gemini vibe; do
     if command -v "$cli" >/dev/null 2>&1; then
@@ -47,9 +47,44 @@ if [ -n "$available_ais" ]; then
     ai_detection_context="\\n\\nAvailable AI CLIs: ${available_ais}"
 fi
 
+# Check for AI routing config (project-local overrides global)
+ai_config=""
+project_config=".superpowers/ai-routing.json"
+global_config="${HOME}/.config/superpowers/ai-routing.json"
+override_config="${SUPERPOWERS_AI_CONFIG:-}"
+
+if [ -n "$override_config" ] && [ -f "$override_config" ]; then
+    ai_config=$(cat "$override_config")
+elif [ -f "$project_config" ]; then
+    if [ -f "$global_config" ]; then
+        # Deep merge: project over global (using python3 for JSON merge)
+        ai_config=$(python3 -c "
+import json, sys
+g = json.load(open('$global_config'))
+p = json.load(open('$project_config'))
+m = {**g, **p}
+if 'overrides' in g and 'overrides' in p:
+    m['overrides'] = {**g['overrides'], **p['overrides']}
+if 'disabled' in g and 'disabled' in p:
+    m['disabled'] = list(set(g['disabled'] + p['disabled']))
+print(json.dumps(m))
+" 2>/dev/null || cat "$project_config")
+    else
+        ai_config=$(cat "$project_config")
+    fi
+elif [ -f "$global_config" ]; then
+    ai_config=$(cat "$global_config")
+fi
+
+ai_config_context=""
+if [ -n "$ai_config" ]; then
+    escaped_config=$(escape_for_json "$ai_config")
+    ai_config_context="\\nAI Routing Config: ${escaped_config}"
+fi
+
 using_superpowers_escaped=$(escape_for_json "$using_superpowers_content")
 warning_escaped=$(escape_for_json "$warning_message")
-session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the full content of your 'superpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n\n${warning_escaped}${ai_detection_context}\n</EXTREMELY_IMPORTANT>"
+session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the full content of your 'superpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n\n${warning_escaped}${ai_detection_context}${ai_config_context}\n</EXTREMELY_IMPORTANT>"
 
 # Output context injection as JSON.
 # Cursor hooks expect additional_context.
