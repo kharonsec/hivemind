@@ -1,6 +1,9 @@
 {
   "name": "kharonsec/hivemind",
   "description": "Hivemind - AI orchestration skills library",
+  "owner": {
+    "name": "kharonsec"
+  },
   "plugins": [
     {
       "name": "hivemind",
