@@ -20,6 +20,14 @@ There's a bunch more to it, but that's the core of the system. And because the s
 
 ### Claude Code
 
+First, add the marketplace:
+
+```bash
+/plugin marketplace add kharonsec/hivemind
+```
+
+Then install:
+
 ```bash
 /plugin install hivemind@kharonsec/hivemind
 ```
