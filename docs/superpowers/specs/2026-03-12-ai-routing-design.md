@@ -39,7 +39,7 @@ No structural changes to the hook's JSON output format. The detection adds ~15 l
 **Config file check:** The hook also looks for an optional config file (see Component 4). If found, it serializes the config into the session context as a structured block:
 
 ```
-AI Routing Config: {"overrides":{"mechanical":"codex"},"disabled":["gemini"],"timeout":600}
+AI Routing Config: {"overrides":{"mechanical":"codex"},"disabled":["gemini"],"timeout":300}
 ```
 
 This is appended as a separate line after the `Available AI CLIs:` line. The routing skill parses both lines to determine available AIs and any user overrides.
@@ -90,13 +90,13 @@ This canonical list is the single source of truth. Both the routing logic and th
 7. If chosen AI is external → invoke via Bash with task prompt
 8. If external AI fails → fall back to native Task tool
 
-**Scope constraint:** Only implementation tasks get routed externally. Spec reviews and code quality reviews always stay with Claude (native Task tool). Reviews require careful reasoning that Claude excels at.
+**Scope constraint:** Only tasks in categories defaulting to an external AI (`ui-design`, `research`, `implementation`, `mechanical`) get routed externally. Tasks in categories defaulting to Claude (`review`, `debugging`, `architecture`) always stay with Claude via native Task tool. This ensures reviews and complex reasoning use Claude's strengths — nuanced judgment, signaling when stuck, and reliable spec compliance.
 
 ### Component 3: External AI Invocation
 
 When the controller routes a task to an external CLI, it invokes it via Bash and captures the result.
 
-**Invocation templates (illustrative — exact flags must be verified against installed CLI versions at implementation time):**
+**Invocation templates:**
 
 ```bash
 # Codex — quiet mode, pipe prompt via stdin
@@ -109,7 +109,7 @@ gemini --non-interactive "<prompt>"
 vibe --auto-approve "<prompt>"
 ```
 
-The skill documents these as starting points. If a CLI updates its flags, only the skill file needs updating.
+**Implementation prerequisite:** Before writing the skill, verify the exact non-interactive/quiet flags for each CLI by running `codex --help`, `gemini --help`, `vibe --help`. The flags above are the expected patterns but must be confirmed against the installed versions. This verification is an explicit task in the implementation plan. If a CLI updates its flags later, only the skill file needs updating.
 
 **Prompt construction:** The controller builds the same prompt structure it would for a native Task subagent (using the existing `implementer-prompt.md`, etc.), but appends a **report format instruction** at the end:
 
@@ -145,8 +145,13 @@ An optional config file lets users override routing defaults. Project-local take
 
 **Locations:**
 
-1. `.superpowers/ai-routing.json` (project-local)
+1. `.superpowers/ai-routing.json` (project-local — takes precedence)
 2. `~/.config/superpowers/ai-routing.json` (global)
+
+**Merge semantics:** If both files exist, the project-local config is a deep merge over the global config:
+- `overrides`: project keys override matching global keys; unmatched global keys are preserved
+- `disabled`: arrays are concatenated (union of both lists)
+- `timeout`: project value wins if present, else global value, else default (300)
 
 **Format:**
 
@@ -169,7 +174,7 @@ An optional config file lets users override routing defaults. Project-local take
 - `disabled` — AIs to never use, even if detected
 - `timeout` — seconds before an external CLI call is considered failed (default 300). Note: repo-scale tasks routed to Codex may need longer timeouts — users should increase this for large projects
 
-Missing config = pure automatic routing. Conversational overrides ("use Claude for this one") always take precedence over config.
+Missing config = pure automatic routing. Conversational overrides ("use Gemini for this one") always take precedence over config — including the `disabled` list. If a user explicitly asks for an AI, honor it even if it's disabled in config.
 
 ### Component 5: Integration with Existing Skills
 
