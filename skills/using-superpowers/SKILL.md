@@ -102,6 +102,10 @@ When multiple skills could apply, use this order:
 "Let's build X" → brainstorming first, then implementation skills.
 "Fix this bug" → debugging first, then domain-specific skills.
 
+## AI Routing
+
+When dispatching subagent tasks and external AI CLIs are available (check session context for `Available AI CLIs:`), consult the `ai-routing` skill to determine which AI should handle each task. This applies to both `subagent-driven-development` and `dispatching-parallel-agents` workflows.
+
 ## Skill Types
 
 **Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
