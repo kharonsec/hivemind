@@ -36,29 +36,59 @@ Available AI CLIs: codex, gemini, vibe
 
 No structural changes to the hook's JSON output format. The detection adds ~15 lines of bash to the existing hook.
 
-**Config file check:** The hook also looks for an optional config file (see Component 4) and includes any overrides in the context.
+**Config file check:** The hook also looks for an optional config file (see Component 4). If found, it serializes the config into the session context as a structured block:
+
+```
+AI Routing Config: {"overrides":{"mechanical":"codex"},"disabled":["gemini"],"timeout":600}
+```
+
+This is appended as a separate line after the `Available AI CLIs:` line. The routing skill parses both lines to determine available AIs and any user overrides.
 
 ### Component 2: Routing Skill (skills/ai-routing/SKILL.md)
 
 A new skill that the controller consults when dispatching subagents. Contains the capability map and routing logic.
 
+**Task categories (canonical list):**
+
+| Category | Description | Default AI |
+|----------|-------------|------------|
+| `ui-design` | UI components, pages, visual layouts, frontend design | Gemini |
+| `research` | Large codebase analysis, documentation, research tasks | Gemini |
+| `implementation` | Multi-file implementation, repo-scale refactoring, heavy execution | Codex |
+| `mechanical` | Boilerplate, simple bug fixes, repetitive refactors, test scaffolding, renaming | Vibe |
+| `review` | Spec compliance, code quality, architecture review | Claude |
+| `debugging` | Root cause analysis, complex debugging, investigation | Claude |
+| `architecture` | Design decisions, complex reasoning, long-context work | Claude |
+
+This canonical list is the single source of truth. Both the routing logic and the user config schema reference these exact category slugs.
+
+**How the controller classifies tasks:** The controller reads the task description and matches it against the category definitions above. This is a judgment call by the controller — it reasons about the task's characteristics (file count, complexity, whether it's creative vs. mechanical, whether it requires deep understanding) and picks the best-fit category. The skill provides examples to guide this judgment:
+
+- "Rename all occurrences of X to Y" → `mechanical`
+- "Build a settings page with tabs and form validation" → `ui-design`
+- "Refactor auth into 3 microservices" → `implementation`
+- "Why does the server crash under load?" → `debugging`
+- "Review this PR for quality" → `review`
+
 **Capability map:**
 
-| AI | Route when task is... | Invoke via |
-|----|----------------------|------------|
-| Claude (default) | Architecture, debugging, code review, complex reasoning, long-context work | Native Task tool (no change) |
-| Gemini | UI design, large codebase analysis, research/documentation, visual tasks | `Bash: gemini --non-interactive "<prompt>"` |
-| Codex | Repo-scale refactoring, multi-file implementation, heavy execution tasks | `Bash: echo "<prompt>" \| codex --quiet --model gpt-5.4` |
-| Vibe | Mechanical/boilerplate, simple bug fixes, repetitive refactors, test scaffolding | `Bash: vibe --auto-approve "<prompt>"` |
+| AI | Categories | Invoke via |
+|----|-----------|------------|
+| Claude (default) | `review`, `debugging`, `architecture` | Native Task tool (no change) |
+| Gemini | `ui-design`, `research` | Bash (see Component 3) |
+| Codex | `implementation` | Bash (see Component 3) |
+| Vibe | `mechanical` | Bash (see Component 3) |
 
 **Routing decision flow:**
 
-1. Is this AI available? (check session context from hook)
-2. Does the user config override routing for this task type? → use override
-3. Match task characteristics to capability map → pick best available AI
-4. If chosen AI is Claude → dispatch via native Task tool (unchanged)
-5. If chosen AI is external → invoke via Bash with task prompt
-6. If external AI fails → fall back to native Task tool
+1. Classify the task into a category (controller judgment, guided by examples above)
+2. Does the user config override routing for this category? → use override
+3. Is the default AI for this category available? (check session context from hook)
+4. If available → route to that AI
+5. If not available → fall back to Claude (native Task tool)
+6. If chosen AI is Claude → dispatch via native Task tool (unchanged)
+7. If chosen AI is external → invoke via Bash with task prompt
+8. If external AI fails → fall back to native Task tool
 
 **Scope constraint:** Only implementation tasks get routed externally. Spec reviews and code quality reviews always stay with Claude (native Task tool). Reviews require careful reasoning that Claude excels at.
 
@@ -66,11 +96,11 @@ A new skill that the controller consults when dispatching subagents. Contains th
 
 When the controller routes a task to an external CLI, it invokes it via Bash and captures the result.
 
-**Invocation templates:**
+**Invocation templates (illustrative — exact flags must be verified against installed CLI versions at implementation time):**
 
 ```bash
 # Codex — quiet mode, pipe prompt via stdin
-echo "<prompt>" | codex --quiet --model gpt-5.4
+echo "<prompt>" | codex --quiet
 
 # Gemini — non-interactive, prompt as argument
 gemini --non-interactive "<prompt>"
@@ -79,9 +109,25 @@ gemini --non-interactive "<prompt>"
 vibe --auto-approve "<prompt>"
 ```
 
-**Prompt construction:** The controller builds the exact same prompt it would for a native Task subagent (using the existing `implementer-prompt.md`, `spec-reviewer-prompt.md`, etc.). The prompt content doesn't change — only the delivery mechanism.
+The skill documents these as starting points. If a CLI updates its flags, only the skill file needs updating.
 
-**Output capture:** The controller reads stdout from the Bash call and parses the response looking for the standard report format (Status: DONE/BLOCKED/NEEDS_CONTEXT/DONE_WITH_CONCERNS).
+**Prompt construction:** The controller builds the same prompt structure it would for a native Task subagent (using the existing `implementer-prompt.md`, etc.), but appends a **report format instruction** at the end:
+
+```
+## IMPORTANT: Report Format
+
+When you are done, you MUST end your response with a report in this exact format:
+
+- **Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+- What you implemented (or what you attempted, if blocked)
+- What you tested and test results
+- Files changed
+- Any issues or concerns
+```
+
+This instruction is appended only when dispatching to external CLIs — native Task subagents already understand the protocol from the prompt templates. External AIs follow instructions well enough that explicitly requesting the format produces parseable output.
+
+**Output capture:** The controller reads stdout from the Bash call and parses the response looking for the standard report format (Status: DONE/BLOCKED/NEEDS_CONTEXT/DONE_WITH_CONCERNS). Since external AIs are explicitly instructed to use this format, output is reliably parseable.
 
 **Failure detection:**
 
@@ -113,17 +159,15 @@ An optional config file lets users override routing defaults. Project-local take
     "review": "claude"
   },
   "disabled": ["codex"],
-  "timeout": 300,
-  "fallback": "claude"
+  "timeout": 300
 }
 ```
 
 **Fields (all optional):**
 
-- `overrides` — map task categories to preferred AI. Categories: `ui-design`, `research`, `implementation`, `mechanical`, `review`, `debugging`, `architecture`
+- `overrides` — map task categories to preferred AI. Categories are the canonical list from Component 2: `ui-design`, `research`, `implementation`, `mechanical`, `review`, `debugging`, `architecture`
 - `disabled` — AIs to never use, even if detected
-- `timeout` — seconds before an external CLI call is considered failed (default 300)
-- `fallback` — which AI to fall back to on failure (default `claude`)
+- `timeout` — seconds before an external CLI call is considered failed (default 300). Note: repo-scale tasks routed to Codex may need longer timeouts — users should increase this for large projects
 
 Missing config = pure automatic routing. Conversational overrides ("use Claude for this one") always take precedence over config.
 
