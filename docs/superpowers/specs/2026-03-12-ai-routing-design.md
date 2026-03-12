@@ -100,12 +100,12 @@ When the controller routes a task to an external CLI, it invokes it via Bash and
 
 ```bash
 # All CLIs receive prompts via stdin to avoid shell argument length limits
-echo "<prompt>" | codex --quiet
-echo "<prompt>" | gemini --non-interactive
-echo "<prompt>" | vibe --auto-approve
+echo "<prompt>" | codex exec -
+echo "<prompt>" | gemini -p
+echo "<prompt>" | vibe -p
 ```
 
-**Implementation prerequisite:** Before writing the skill, verify the exact non-interactive/quiet flags for each CLI by running `codex --help`, `gemini --help`, `vibe --help`. The flags above are the expected patterns but must be confirmed against the installed versions. This verification is an explicit task in the implementation plan. If a CLI updates its flags later, only the skill file needs updating.
+**Flags verified on 2026-03-12** against installed CLI versions. If a CLI updates its flags later, only the skill file needs updating.
 
 **Prompt construction:** The controller builds the same prompt structure it would for a native Task subagent (using the existing `implementer-prompt.md`, etc.), but appends a **report format instruction** at the end:
 
