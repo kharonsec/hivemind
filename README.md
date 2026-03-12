@@ -14,60 +14,30 @@ Next up, once you say "go", it launches a *subagent-driven-development* process,
 
 There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Hivemind.
 
-
-## Sponsorship
-
-If Hivemind has helped you do stuff that makes money and you are so inclined, I'd greatly appreciate it if you'd consider [sponsoring my opensource work](https://github.com/sponsors/obra).
-
-Thanks! 
-
-- Jesse
-
-
 ## Installation
 
 **Note:** Installation differs by platform. Claude Code or Cursor have built-in plugin marketplaces. Codex and OpenCode require manual setup.
 
-### Claude Code Official Marketplace
-
-Hivemind is available via the [official Claude plugin marketplace](https://claude.com/plugins/hivemind)
-
-Install the plugin from Claude marketplace:
+### Claude Code
 
 ```bash
-/plugin install hivemind@claude-plugins-official
+/plugin install hivemind@kharonsec/hivemind
 ```
 
-### Claude Code (via Plugin Marketplace)
+### Cursor
 
-In Claude Code, register the marketplace first:
-
-```bash
-/plugin marketplace add obra/superpowers-marketplace
-```
-
-Then install the plugin from this marketplace:
-
-```bash
-/plugin install hivemind@superpowers-marketplace
-```
-
-### Cursor (via Plugin Marketplace)
-
-In Cursor Agent chat, install from marketplace:
+In Cursor Agent chat:
 
 ```text
 /add-plugin hivemind
 ```
-
-or search for "hivemind" in the plugin marketplace.
 
 ### Codex
 
 Tell Codex:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/kharonsec/hivemind/refs/heads/main/.codex/INSTALL.md
 ```
 
 **Detailed docs:** [docs/README.codex.md](docs/README.codex.md)
@@ -77,7 +47,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/obra/superp
 Tell OpenCode:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/kharonsec/hivemind/refs/heads/main/.opencode/INSTALL.md
 ```
 
 **Detailed docs:** [docs/README.opencode.md](docs/README.opencode.md)
@@ -85,7 +55,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/obra/superp
 ### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/obra/superpowers
+gemini extensions install https://github.com/kharonsec/hivemind
 ```
 
 To update:
@@ -149,8 +119,6 @@ Start a new session in your chosen platform and ask for something that should tr
 - **Complexity reduction** - Simplicity as primary goal
 - **Evidence over claims** - Verify before declaring success
 
-Read more: [Hivemind for Claude Code](https://blog.fsck.com/2025/10/09/superpowers/)
-
 ## Contributing
 
 Skills live directly in this repository. To contribute:
@@ -176,5 +144,4 @@ MIT License - see LICENSE file for details
 
 ## Support
 
-- **Issues**: https://github.com/obra/superpowers/issues
-- **Marketplace**: https://github.com/obra/superpowers-marketplace
+- **Issues**: https://github.com/kharonsec/hivemind/issues

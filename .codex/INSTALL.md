@@ -10,7 +10,7 @@ Enable hivemind skills in Codex via native skill discovery. Just clone and symli
 
 1. **Clone the hivemind repository:**
    ```bash
-   git clone https://github.com/obra/superpowers.git ~/.codex/hivemind
+   git clone https://github.com/kharonsec/hivemind.git ~/.codex/hivemind
    ```
 
 2. **Create the skills symlink:**

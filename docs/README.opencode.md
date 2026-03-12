@@ -7,7 +7,7 @@ Complete guide for using Hivemind with [OpenCode.ai](https://opencode.ai).
 Tell OpenCode:
 
 ```
-Clone https://github.com/obra/superpowers to ~/.config/opencode/hivemind, then create directory ~/.config/opencode/plugins, then symlink ~/.config/opencode/hivemind/.opencode/plugins/superpowers.js to ~/.config/opencode/plugins/hivemind.js, then symlink ~/.config/opencode/hivemind/skills to ~/.config/opencode/skills/hivemind, then restart opencode.
+Clone https://github.com/kharonsec/hivemind to ~/.config/opencode/hivemind, then create directory ~/.config/opencode/plugins, then symlink ~/.config/opencode/hivemind/.opencode/plugins/superpowers.js to ~/.config/opencode/plugins/hivemind.js, then symlink ~/.config/opencode/hivemind/skills to ~/.config/opencode/skills/hivemind, then restart opencode.
 ```
 
 ## Manual Installation
@@ -24,7 +24,7 @@ Clone https://github.com/obra/superpowers to ~/.config/opencode/hivemind, then c
 if [ -d ~/.config/opencode/hivemind ]; then
   cd ~/.config/opencode/hivemind && git pull
 else
-  git clone https://github.com/obra/superpowers.git ~/.config/opencode/hivemind
+  git clone https://github.com/kharonsec/hivemind.git ~/.config/opencode/hivemind
 fi
 
 # 2. Create directories
@@ -66,7 +66,7 @@ Run as Administrator, or with Developer Mode enabled:
 
 ```cmd
 :: 1. Install Hivemind
-git clone https://github.com/obra/superpowers.git "%USERPROFILE%\.config\opencode\hivemind"
+git clone https://github.com/kharonsec/hivemind.git "%USERPROFILE%\.config\opencode\hivemind"
 
 :: 2. Create directories
 mkdir "%USERPROFILE%\.config\opencode\plugins" 2>nul
@@ -91,7 +91,7 @@ Run as Administrator, or with Developer Mode enabled:
 
 ```powershell
 # 1. Install Hivemind
-git clone https://github.com/obra/superpowers.git "$env:USERPROFILE\.config\opencode\hivemind"
+git clone https://github.com/kharonsec/hivemind.git "$env:USERPROFILE\.config\opencode\hivemind"
 
 # 2. Create directories
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.config\opencode\plugins"
@@ -116,7 +116,7 @@ Note: Git Bash's native `ln` command copies files instead of creating symlinks. 
 
 ```bash
 # 1. Install Hivemind
-git clone https://github.com/obra/superpowers.git ~/.config/opencode/hivemind
+git clone https://github.com/kharonsec/hivemind.git ~/.config/opencode/hivemind
 
 # 2. Create directories
 mkdir -p ~/.config/opencode/plugins ~/.config/opencode/skills
@@ -308,8 +308,8 @@ If you see `Cannot find module` errors on Windows:
 
 ## Getting Help
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Main documentation: https://github.com/obra/superpowers
+- Report issues: https://github.com/kharonsec/hivemind/issues
+- Main documentation: https://github.com/kharonsec/hivemind
 - OpenCode docs: https://opencode.ai/docs/
 
 ## Testing

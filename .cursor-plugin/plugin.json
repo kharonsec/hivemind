@@ -3,12 +3,8 @@
   "displayName": "Hivemind",
   "description": "Core skills library: TDD, debugging, collaboration patterns, and proven techniques",
   "version": "5.0.2",
-  "author": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
-  },
-  "homepage": "https://github.com/obra/superpowers",
-  "repository": "https://github.com/obra/superpowers",
+  "homepage": "https://github.com/kharonsec/hivemind",
+  "repository": "https://github.com/kharonsec/hivemind",
   "license": "MIT",
   "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"],
   "skills": "./skills/",

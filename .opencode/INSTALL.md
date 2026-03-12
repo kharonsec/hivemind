@@ -10,7 +10,7 @@
 ### 1. Clone Hivemind
 
 ```bash
-git clone https://github.com/obra/superpowers.git ~/.config/opencode/hivemind
+git clone https://github.com/kharonsec/hivemind.git ~/.config/opencode/hivemind
 ```
 
 ### 2. Register the Plugin
@@ -115,5 +115,5 @@ When skills reference Claude Code tools:
 
 ## Getting Help
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Full documentation: https://github.com/obra/superpowers/blob/main/docs/README.opencode.md
+- Report issues: https://github.com/kharonsec/hivemind/issues
+- Full documentation: https://github.com/kharonsec/hivemind/blob/main/docs/README.opencode.md

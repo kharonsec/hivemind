@@ -7,7 +7,7 @@ Guide for using Hivemind with OpenAI Codex via native skill discovery.
 Tell Codex:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/kharonsec/hivemind/refs/heads/main/.codex/INSTALL.md
 ```
 
 ## Manual Installation
@@ -21,7 +21,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/obra/superp
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/obra/superpowers.git ~/.codex/hivemind
+   git clone https://github.com/kharonsec/hivemind.git ~/.codex/hivemind
    ```
 
 2. Create the skills symlink:
@@ -122,5 +122,5 @@ Junctions normally work without special permissions. If creation fails, try runn
 
 ## Getting Help
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Main documentation: https://github.com/obra/superpowers
+- Report issues: https://github.com/kharonsec/hivemind/issues
+- Main documentation: https://github.com/kharonsec/hivemind
