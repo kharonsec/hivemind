@@ -141,8 +141,8 @@ An optional config file lets users override routing defaults. Project-local take
 
 **Locations:**
 
-1. `.superpowers/ai-routing.json` (project-local — takes precedence)
-2. `~/.config/superpowers/ai-routing.json` (global)
+1. `.hivemind/ai-routing.json` (project-local — takes precedence)
+2. `~/.config/hivemind/ai-routing.json` (global)
 
 **Merge semantics:** If both files exist, the project-local config is a deep merge over the global config:
 - `overrides`: project keys override matching global keys; unmatched global keys are preserved

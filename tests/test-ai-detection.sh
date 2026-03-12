@@ -51,7 +51,7 @@ cat > "${config_dir}/ai-routing.json" <<'CONF'
 CONF
 
 # Run hook with config path override for testing
-output_config=$(SUPERPOWERS_AI_CONFIG="${config_dir}/ai-routing.json" bash "$HOOK" 2>&1)
+output_config=$(HIVEMIND_AI_CONFIG="${config_dir}/ai-routing.json" bash "$HOOK" 2>&1)
 
 if echo "$output_config" | grep -q "AI Routing Config"; then
     echo "PASS: Config detection found"

@@ -11,7 +11,7 @@ PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 warning_message=""
 legacy_skills_dir="${HOME}/.config/superpowers/skills"
 if [ -d "$legacy_skills_dir" ]; then
-    warning_message="\n\n<important-reminder>IN YOUR FIRST REPLY AFTER SEEING THIS MESSAGE YOU MUST TELL THE USER:⚠️ **WARNING:** Superpowers now uses Claude Code's skills system. Custom skills in ~/.config/superpowers/skills will not be read. Move custom skills to ~/.claude/skills instead. To make this message go away, remove ~/.config/superpowers/skills</important-reminder>"
+    warning_message="\n\n<important-reminder>IN YOUR FIRST REPLY AFTER SEEING THIS MESSAGE YOU MUST TELL THE USER:⚠️ **WARNING:** Hivemind now uses Claude Code's skills system. Custom skills in ~/.config/hivemind/skills will not be read. Move custom skills to ~/.claude/skills instead. To make this message go away, remove ~/.config/hivemind/skills</important-reminder>"
 fi
 
 # Read using-superpowers content
@@ -49,9 +49,9 @@ fi
 
 # Check for AI routing config (project-local overrides global)
 ai_config=""
-project_config=".superpowers/ai-routing.json"
-global_config="${HOME}/.config/superpowers/ai-routing.json"
-override_config="${SUPERPOWERS_AI_CONFIG:-}"
+project_config=".hivemind/ai-routing.json"
+global_config="${HOME}/.config/hivemind/ai-routing.json"
+override_config="${HIVEMIND_AI_CONFIG:-}"
 
 if [ -n "$override_config" ] && [ -f "$override_config" ]; then
     ai_config=$(cat "$override_config")

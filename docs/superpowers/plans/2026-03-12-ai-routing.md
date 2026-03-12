@@ -171,7 +171,7 @@ Add after the CLI detection block in `hooks/session-start`:
 ```bash
 # Check for AI routing config (project-local overrides global)
 ai_config=""
-project_config=".superpowers/ai-routing.json"
+project_config=".hivemind/ai-routing.json"
 global_config="${HOME}/.config/superpowers/ai-routing.json"
 override_config="${SUPERPOWERS_AI_CONFIG:-}"
 
@@ -345,8 +345,8 @@ Parse the stdout for the Status line. If no recognizable status is found, treat 
 Users can override routing defaults via an optional config file. Check your session context for the `AI Routing Config:` line.
 
 **Config locations** (project-local takes precedence, deep merged over global):
-1. `.superpowers/ai-routing.json` (project)
-2. `~/.config/superpowers/ai-routing.json` (global)
+1. `.hivemind/ai-routing.json` (project)
+2. `~/.config/hivemind/ai-routing.json` (global)
 
 **Format:**
 

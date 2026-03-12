@@ -1,6 +1,6 @@
-# Superpowers
+# Hivemind
 
-Superpowers is a complete software development workflow for your coding agents, built on top of a set of composable "skills" and some initial instructions that make sure your agent uses them.
+Hivemind is a complete software development workflow for your coding agents, built on top of a set of composable "skills" and some initial instructions that make sure your agent uses them.
 
 ## How it works
 
@@ -12,12 +12,12 @@ After you've signed off on the design, your agent puts together an implementatio
 
 Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for Claude to be able to work autonomously for a couple hours at a time without deviating from the plan you put together.
 
-There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.
+There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Hivemind.
 
 
 ## Sponsorship
 
-If Superpowers has helped you do stuff that makes money and you are so inclined, I'd greatly appreciate it if you'd consider [sponsoring my opensource work](https://github.com/sponsors/obra).
+If Hivemind has helped you do stuff that makes money and you are so inclined, I'd greatly appreciate it if you'd consider [sponsoring my opensource work](https://github.com/sponsors/obra).
 
 Thanks! 
 
@@ -30,12 +30,12 @@ Thanks!
 
 ### Claude Code Official Marketplace
 
-Superpowers is available via the [official Claude plugin marketplace](https://claude.com/plugins/superpowers)
+Hivemind is available via the [official Claude plugin marketplace](https://claude.com/plugins/hivemind)
 
 Install the plugin from Claude marketplace:
 
 ```bash
-/plugin install superpowers@claude-plugins-official
+/plugin install hivemind@claude-plugins-official
 ```
 
 ### Claude Code (via Plugin Marketplace)
@@ -49,7 +49,7 @@ In Claude Code, register the marketplace first:
 Then install the plugin from this marketplace:
 
 ```bash
-/plugin install superpowers@superpowers-marketplace
+/plugin install hivemind@superpowers-marketplace
 ```
 
 ### Cursor (via Plugin Marketplace)
@@ -57,10 +57,10 @@ Then install the plugin from this marketplace:
 In Cursor Agent chat, install from marketplace:
 
 ```text
-/add-plugin superpowers
+/add-plugin hivemind
 ```
 
-or search for "superpowers" in the plugin marketplace.
+or search for "hivemind" in the plugin marketplace.
 
 ### Codex
 
@@ -91,12 +91,12 @@ gemini extensions install https://github.com/obra/superpowers
 To update:
 
 ```bash
-gemini extensions update superpowers
+gemini extensions update hivemind
 ```
 
 ### Verify Installation
 
-Start a new session in your chosen platform and ask for something that should trigger a skill (for example, "help me plan this feature" or "let's debug this issue"). The agent should automatically invoke the relevant superpowers skill.
+Start a new session in your chosen platform and ask for something that should trigger a skill (for example, "help me plan this feature" or "let's debug this issue"). The agent should automatically invoke the relevant hivemind skill.
 
 ## The Basic Workflow
 
@@ -140,7 +140,7 @@ Start a new session in your chosen platform and ask for something that should tr
 
 **Meta**
 - **writing-skills** - Create new skills following best practices (includes testing methodology)
-- **using-superpowers** - Introduction to the skills system
+- **using-hivemind** - Introduction to the skills system
 
 ## Philosophy
 
@@ -149,7 +149,7 @@ Start a new session in your chosen platform and ask for something that should tr
 - **Complexity reduction** - Simplicity as primary goal
 - **Evidence over claims** - Verify before declaring success
 
-Read more: [Superpowers for Claude Code](https://blog.fsck.com/2025/10/09/superpowers/)
+Read more: [Hivemind for Claude Code](https://blog.fsck.com/2025/10/09/superpowers/)
 
 ## Contributing
 
@@ -167,7 +167,7 @@ See `skills/writing-skills/SKILL.md` for the complete guide.
 Skills update automatically when you update the plugin:
 
 ```bash
-/plugin update superpowers
+/plugin update hivemind
 ```
 
 ## License
