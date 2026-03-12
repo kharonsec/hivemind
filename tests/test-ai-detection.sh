@@ -14,15 +14,34 @@ echo "$output" | python3 -c "import sys, json; json.load(sys.stdin)" || {
     exit 1
 }
 
-# Verify the output contains AI CLI detection context
-if echo "$output" | grep -q "Available AI CLIs"; then
-    echo "PASS: AI CLI detection context found"
+# Check if any AI CLIs are actually installed
+has_cli=false
+for cli in codex gemini vibe; do
+    if command -v "$cli" >/dev/null 2>&1; then
+        has_cli=true
+        break
+    fi
+done
+
+# If CLIs are installed, the detection line should appear
+# If no CLIs are installed, the hook should still produce valid JSON (graceful no-op)
+if [ "$has_cli" = true ]; then
+    if echo "$output" | grep -q "Available AI CLIs"; then
+        echo "PASS: AI CLI detection context found (CLIs are installed)"
+    else
+        echo "FAIL: AI CLI detection context not found despite CLIs being installed"
+        exit 1
+    fi
 else
-    echo "FAIL: AI CLI detection context not found"
-    exit 1
+    if echo "$output" | grep -q "Available AI CLIs"; then
+        echo "FAIL: AI CLI detection context found but no CLIs are installed"
+        exit 1
+    else
+        echo "PASS: No AI CLI detection context (no CLIs installed, graceful no-op)"
+    fi
 fi
 
-# Test negative case: hook still produces valid JSON regardless
+# Verify JSON is always valid regardless of CLI availability
 echo "$output" | python3 -c "import sys, json; d = json.load(sys.stdin); print('PASS: Valid JSON regardless of CLI availability')"
 
 echo "All tests passed"
