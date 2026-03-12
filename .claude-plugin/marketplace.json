@@ -1,0 +1,12 @@
+{
+  "name": "kharonsec/hivemind",
+  "description": "Hivemind - AI orchestration skills library",
+  "plugins": [
+    {
+      "name": "hivemind",
+      "description": "Core skills library: TDD, debugging, collaboration patterns, multi-AI routing, and proven techniques",
+      "version": "5.0.2",
+      "source": "./"
+    }
+  ]
+}
